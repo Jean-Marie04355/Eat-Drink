@@ -8,8 +8,8 @@
         <div class="collapse navbar-collapse" id="navMain">
             <ul class="navbar-nav ms-auto">
                 @guest
-                    <li class="nav-item"><a class="nav-link" href="{{ route('login') }}">Se connecter</a></li>
-                    <li class="nav-item"><a class="nav-link" href="{{ route('register') }}">Demander un stand</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/login">Se connecter</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/inscription">Demander un stand</a></li>
                 @else
                     @if(Auth::user()->role === 'admin')
                         <li class="nav-item"><a class="nav-link" href="{{ route('admin.dashboard') }}">Admin</a></li>
