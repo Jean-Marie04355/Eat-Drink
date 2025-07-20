@@ -21,13 +21,24 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 // Statut (protégé plus tard avec middleware si besoin)
 Route::view('/statut', 'auth.statut')->name('auth.statut');
 
+
+// Page d’un stand spécifique : à adapter dynamiquement si besoin
+ Route::get('/exposants/{id}', function ($id) {
+    // ⚠️ Simule l’affichage du stand avec des données fictives
+     return view('exposants.show', ['stand_id' => $id]);
+ })->name('exposants.show');
+
+
+
+
+
+
 // Exposants
 Route::get('/exposants', [ExposantController::class, 'index'])->name('exposants.index');
-Route::get('/exposants/{id}', function ($id) {
-    return view('exposants.show', ['stand_id' => $id]);
-})->name('exposants.show');
+
 
 // Panier
+
 Route::view('/panier', 'panier')->name('panier');
 Route::post('/panier/{id}', function ($id) {
     return redirect()->route('panier')->with('status', "Produit $id ajouté au panier 🛒");
@@ -40,5 +51,16 @@ Route::post('/commande', function () {
 
 Route::view('/confirmation', 'confirmation')->name('commande.confirmation');
 
-// Test simple
-Route::view('/test', 'test');
+
+
+//Produits 
+Route::view('/dashboard/produits', 'produits.index');
+
+//Creer produits_formulaire
+Route::view('/dashboard/produits/create', 'produits.create');
+
+
+// Dashboard
+Route::view('/dashboard', 'dashboard')->name('dashboard');
+
+
