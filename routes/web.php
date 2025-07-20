@@ -94,10 +94,25 @@ Route::view('/exposants', 'exposants')->name('exposants.index');
 Route::view('/exposants', 'exposants')->name('exposants.index');
 
 // Page d’un stand spécifique : à adapter dynamiquement si besoin
+// Route::get('/exposants/{id}', function ($id) {
+//     // ⚠️ Simule l’affichage du stand avec des données fictives
+//     return view('exposants.show', ['stand_id' => $id]);
+// })->name('exposants.show');
+
 Route::get('/exposants/{id}', function ($id) {
-    // ⚠️ Simule l’affichage du stand avec des données fictives
-    return view('exposants.show', ['stand_id' => $id]);
+    $stand = [
+        'nom' => 'Les Délices Africains',
+        'categorie' => 'Cuisine traditionnelle',
+        'entrepreneur' => 'Awa Traoré',
+        'produits' => [
+            ['id' => 1, 'nom' => 'Poulet braisé', 'description' => 'Mariné aux épices d’Afrique', 'prix' => 3500, 'image' => 'https://source.unsplash.com/400x300/?chicken'],
+            ['id' => 2, 'nom' => 'Attiéké poisson', 'description' => 'Servi avec tomate pimentée', 'prix' => 4000, 'image' => 'https://source.unsplash.com/400x300/?fish'],
+            ['id' => 3, 'nom' => 'Jus de bissap', 'description' => 'Boisson fraîche maison', 'prix' => 1000, 'image' => 'https://source.unsplash.com/400x300/?juice'],
+        ],
+    ];
+    return view('exposants.show', ['stand' => $stand]);
 })->name('exposants.show');
+
 
 // Affichage du panier
 Route::view('/panier', 'panier')->name('panier');
@@ -115,3 +130,13 @@ Route::post('/commande', function () {
 
 // Page de confirmation après commande
 Route::view('/confirmation', 'confirmation')->name('commande.confirmation');
+
+
+Route::view('/dashboard/produits', 'produits.index');
+
+Route::view('/dashboard/produits/create', 'produits.create');
+
+
+// Dashboard
+Route::view('/dashboard', 'dashboard')->name('dashboard');
+

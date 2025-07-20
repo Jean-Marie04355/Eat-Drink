@@ -1,10 +1,10 @@
 <!-- page d’un stand approuvé -->
+ show
  @extends('layouts.app')
 @section('content')
 <div class="container">
     <h2>{{ $stand->nom }}</h2>
     <p><strong>Géré par :</strong> {{ $stand->entrepreneur->nom }}</p>
-
     <div class="row mt-4">
         @foreach($stand->produits as $produit)
             <div class="col-md-4">

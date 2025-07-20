@@ -1,5 +1,5 @@
 <!--  panier du visiteur -->
-  @extends('layouts.app')
+ @extends('layouts.app')
 @section('content')
 <div class="container">
     <h2>Votre panier 🛍️</h2>

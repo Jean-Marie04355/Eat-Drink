@@ -1,5 +1,5 @@
 <!-- page publique "Nos Exposants" -->
- @extends('layouts.app')
+@extends('layouts.app')
 @section('content')
 <div class="container">
     <h2>Nos Exposants Approuvés 👨‍🍳</h2>
