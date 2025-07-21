@@ -28,7 +28,8 @@ class AuthController extends Controller
     }
 
     // Connexion
-   public function login(Request $request)
+  // Connexion
+public function login(Request $request)
 {
     $credentials = $request->validate([
         'email' => ['required', 'email'],
@@ -38,14 +39,23 @@ class AuthController extends Controller
     if (Auth::attempt($credentials)) {
         $request->session()->regenerate();
 
-        // Redirection vers la route 'exposants.index' après connexion réussie
-        return redirect()->route('exposants.index')->with('status', 'Connexion réussie !');
+        $user = Auth::user();
+        if ($user->role === 'admin') {
+           return redirect()->route('admin.dashboard')->with('status', 'Bienvenue administrateur !');
+
+        } elseif ($user->role === 'entrepreneur_approuve') {
+            return redirect()->route('entrepreneur.dashboard')->with('status', 'Bienvenue sur votre tableau de bord !');
+        } else {
+            Auth::logout();
+            return redirect()->route('login')->withErrors(['email' => 'Votre compte n\'est pas encore approuvé.']);
+        }
     }
 
     return back()->withErrors([
         'email' => 'Identifiants invalides.',
     ])->onlyInput('email');
-    }
+}
+
 
     // Déconnexion
     public function logout(Request $request)

@@ -3,17 +3,33 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Exposant; // le modèle
+use App\Models\User;  // <-- Ajoute cette ligne
+use App\Models\Produit;
 
 
 class ExposantController extends Controller
 {
     public function index()
     {
-        // Création de la variable $exposants
-        $exposants = Exposant::where('statut', 'approuvé')->get(); // ou ->all() si tu veux tout
+        $exposants = User::where('role', 'entrepreneur_approuve')->get();
 
-        // Envoi de la variable à la vue exposants.blade.php
-        return view('exposants', compact('exposants'));
+        return view('exposants.index', compact('exposants'));
+    }
+
+
+    public function produits($id)
+{
+    $exposant = User::findOrFail($id);
+    $produits = $exposant->produits; // grâce à la relation
+
+    return view('exposants.produits', compact('exposant', 'produits'));
+}
+
+  public function show($id)
+    {
+        $exposant = User::findOrFail($id);
+        $produits = Produit::where('user_id', $id)->get();
+
+        return view('exposants.show', compact('exposant', 'produits'));
     }
 }

@@ -3,13 +3,20 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ExposantController;
+use App\Http\Controllers\AdminController;
+use App\Http\Controllers\EntrepreneurController;
+use App\Http\Controllers\ProduitController;
+/*
+|--------------------------------------------------------------------------
+| Routes Web
+|--------------------------------------------------------------------------
+*/
 
-
-// Page d'accueil
+// Page d'accueil (accessible sans authentification)
 Route::view('/', 'accueil')->name('accueil');
-Route::view('/accueil', 'accueil')->name('accueil'); // si besoin en doublon
+Route::view('/accueil', 'accueil'); // doublon optionnel
 
-// Authentification
+// Authentification (login/inscription)
 Route::view('/login', 'auth.login')->name('login');
 Route::post('/login', [AuthController::class, 'login'])->name('login.process');
 
@@ -18,27 +25,21 @@ Route::post('/inscription', [AuthController::class, 'inscriptionPost'])->name('a
 
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
-// Statut (protégé plus tard avec middleware si besoin)
+// Statut de l'inscription (ex: entrepreneur en attente)
 Route::view('/statut', 'auth.statut')->name('auth.statut');
 
+// Routes protégées par authentification
+Route::middleware(['auth'])->group(function () {
 
-// Page d’un stand spécifique : à adapter dynamiquement si besoin
- Route::get('/exposants/{id}', function ($id) {
-    // ⚠️ Simule l’affichage du stand avec des données fictives
-     return view('exposants.show', ['stand_id' => $id]);
- })->name('exposants.show');
+    // Tableau de bord admin — accessible uniquement à l'admin (middleware à ajouter dans AdminController)
+    Route::get('/dashboard', [AdminController::class, 'index'])->name('admin.dashboard');
 
+    // Espace exposants — accessible aux utilisateurs connectés (tu peux filtrer les rôles dans le controller)
+   
 
+});
 
-
-
-
-// Exposants
-Route::get('/exposants', [ExposantController::class, 'index'])->name('exposants.index');
-
-
-// Panier
-
+// Panier (si accessible sans login, sinon mettre dans middleware auth)
 Route::view('/panier', 'panier')->name('panier');
 Route::post('/panier/{id}', function ($id) {
     return redirect()->route('panier')->with('status', "Produit $id ajouté au panier 🛒");
@@ -51,16 +52,31 @@ Route::post('/commande', function () {
 
 Route::view('/confirmation', 'confirmation')->name('commande.confirmation');
 
+Route::middleware(['auth'])->group(function () {
+    Route::get('/dashboard', [AdminController::class, 'index'])->name('admin.dashboard');
+    Route::post('/dashboard/approuver/{id}', [AdminController::class, 'approuver'])->name('admin.approuver');
+    Route::post('/dashboard/rejeter/{id}', [AdminController::class, 'rejeter'])->name('admin.rejeter');
+});
+
+Route::middleware(['auth', 'role:entrepreneur_approuve'])->group(function () {
+    Route::get('/entrepreneur/dashboard', [EntrepreneurController::class, 'dashboard'])->name('entrepreneur.dashboard');
+});
+
+ Route::get('/exposants', [ExposantController::class, 'index'])->name('exposants.index');
+    Route::get('/exposants/{id}', function ($id) {
+       return view('exposants.produits', ['stand_id' => $id]);
+})->name('exposants.show');
 
 
-//Produits 
-Route::view('/dashboard/produits', 'produits.index');
-
-//Creer produits_formulaire
-Route::view('/dashboard/produits/create', 'produits.create');
-
-
-// Dashboard
-Route::view('/dashboard', 'dashboard')->name('dashboard');
-
+  Route::middleware(['auth', 'role:entrepreneur_approuve'])->prefix('entrepreneur')->name('entrepreneur.')->group(function () {
+    Route::get('/produits', [ProduitController::class, 'index'])->name('produits.index');
+    Route::get('/produits/create', [ProduitController::class, 'create'])->name('produits.create');
+    Route::post('/produits', [ProduitController::class, 'store'])->name('produits.store');
+    Route::get('/produits/{produit}/edit', [ProduitController::class, 'edit'])->name('produits.edit');
+    Route::put('/produits/{produit}', [ProduitController::class, 'update'])->name('produits.update');
+    Route::delete('/produits/{produit}', [ProduitController::class, 'destroy'])->name('produits.destroy');
+      Route::resource('produits', ProduitController::class);
+});
+Route::get('/exposants/{id}/produits', [ExposantController::class, 'produits'])->name('exposants.produits');
+Route::get('/exposants/{id}', [ExposantController::class, 'show'])->name('exposants.show');
 

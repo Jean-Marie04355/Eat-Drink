@@ -21,6 +21,11 @@ return new class extends Migration
             $table->string('password');
             $table->rememberToken();
             $table->timestamps();
+            $table->string('role')->default('entrepreneur_en_attente');
+           $table->string('motif_rejet', 500)->nullable();
+
+
+
         });
     }
 
