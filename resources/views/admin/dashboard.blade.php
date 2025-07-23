@@ -56,6 +56,63 @@
     @endif
 </div>
 
+{{-- Commandes par entrepreneur --}}
+<div class="container my-5">
+    <h2 class="mb-4 text-center">📦 Commandes par entrepreneur</h2>
+    @forelse($entrepreneurs as $entrepreneur)
+        <div class="card mb-4 shadow-sm">
+            <div class="card-header bg-success text-white">
+                <h5 class="mb-0">{{ $entrepreneur->nom_entreprise }} <span class="text-light">({{ $entrepreneur->email }})</span></h5>
+            </div>
+            <div class="card-body">
+                @php
+                    $commandes = collect();
+                    foreach($entrepreneur->produits as $produit) {
+                        foreach($produit->commandes as $commande) {
+                            $commandes->push($commande);
+                        }
+                    }
+                    $commandes = $commandes->unique('id');
+                @endphp
+                @if($commandes->isEmpty())
+                    <div class="alert alert-info">Aucune commande pour cet entrepreneur.</div>
+                @else
+                    <div class="table-responsive">
+                        <table class="table table-bordered align-middle">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>#</th>
+                                    <th>Date</th>
+                                    <th>Produits commandés</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach($commandes as $commande)
+                                    <tr>
+                                        <td>{{ $commande->id }}</td>
+                                        <td>{{ $commande->created_at->format('d/m/Y H:i') }}</td>
+                                        <td>
+                                            <ul class="mb-0">
+                                                @foreach($commande->produits as $produit)
+                                                    @if($produit->user_id == $entrepreneur->id)
+                                                        <li>{{ $produit->nom }} - Quantité : {{ $produit->pivot->quantite }}</li>
+                                                    @endif
+                                                @endforeach
+                                            </ul>
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                @endif
+            </div>
+        </div>
+    @empty
+        <div class="alert alert-info text-center">Aucun entrepreneur approuvé.</div>
+    @endforelse
+</div>
+
 <!-- Script d'affichage du formulaire de rejet -->
 <script>
     function toggleRejectForm(userId) {

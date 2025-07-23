@@ -15,6 +15,12 @@ class Authenticate extends Middleware
     protected function redirectTo($request)
     {
         if (! $request->expectsJson()) {
+            // Si l'utilisateur est connecté mais en attente d'approbation, on le redirige vers la page de statut
+            if (auth()->check() && auth()->user()->role === 'entrepreneur_en_attente') {
+                if (!$request->routeIs('auth.statut')) {
+                    return route('auth.statut');
+                }
+            }
             return route('login');
         }
     }

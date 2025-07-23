@@ -22,6 +22,7 @@ class AuthController extends Controller
             'nom_entreprise' => $request->nom_entreprise,
             'email' => $request->email,
             'password' => Hash::make($request->password),
+            'role' => 'entrepreneur_en_attente',
         ]);
 
         return redirect()->route('login')->with('status', 'Inscription réussie !');
@@ -46,8 +47,7 @@ public function login(Request $request)
         } elseif ($user->role === 'entrepreneur_approuve') {
             return redirect()->route('entrepreneur.dashboard')->with('status', 'Bienvenue sur votre tableau de bord !');
         } else {
-            Auth::logout();
-            return redirect()->route('login')->withErrors(['email' => 'Votre compte n\'est pas encore approuvé.']);
+            return redirect()->route('auth.statut');
         }
     }
 

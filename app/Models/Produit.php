@@ -14,9 +14,10 @@ class Produit extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function exposant()
+   public function commandes()
 {
-    return $this->belongsTo(User::class, 'user_id');
+    return $this->belongsToMany(Commande::class)->withPivot('quantite');
 }
+
 
 }

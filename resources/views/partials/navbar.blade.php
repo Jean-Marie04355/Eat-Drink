@@ -7,6 +7,10 @@
 
         <div class="collapse navbar-collapse" id="navMain">
             <ul class="navbar-nav ms-auto">
+                <li class="nav-item"><a class="nav-link" href="/accueil">Accueil</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{ route('exposants.index') }}">Exposants</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{ route('panier.index') }}">Mon panier</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{ route('commandes.index') }}">Mes commandes</a></li>
                 @guest
                     <li class="nav-item"><a class="nav-link" href="/login">Se connecter</a></li>
                     <li class="nav-item"><a class="nav-link" href="/inscription">Demander un stand</a></li>

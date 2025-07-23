@@ -6,6 +6,13 @@ use App\Http\Controllers\ExposantController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\EntrepreneurController;
 use App\Http\Controllers\ProduitController;
+use App\Http\Controllers\PanierController;
+use App\Http\Controllers\CommandeController;
+
+
+
+
+
 /*
 |--------------------------------------------------------------------------
 | Routes Web
@@ -80,3 +87,19 @@ Route::middleware(['auth', 'role:entrepreneur_approuve'])->group(function () {
 Route::get('/exposants/{id}/produits', [ExposantController::class, 'produits'])->name('exposants.produits');
 Route::get('/exposants/{id}', [ExposantController::class, 'show'])->name('exposants.show');
 
+
+
+Route::get('/panier', [PanierController::class, 'index'])->name('panier.index');
+Route::post('/panier/ajouter/{id}', [PanierController::class, 'ajouter'])->name('panier.ajouter');
+Route::post('/panier/retirer/{id}', [PanierController::class, 'retirer'])->name('panier.retirer');
+
+// Commande
+Route::post('/commande/passer', [CommandeController::class, 'passer'])->name('commande.passer');
+
+// Panier d’exposants
+Route::get('/panier-exposants', [\App\Http\Controllers\PanierController::class, 'panierExposants'])->name('panier.exposants');
+Route::post('/panier-exposants/ajouter/{id}', [\App\Http\Controllers\PanierController::class, 'ajouterExposant'])->name('panier.ajouterExposant');
+Route::post('/panier-exposants/retirer/{id}', [\App\Http\Controllers\PanierController::class, 'retirerExposant'])->name('panier.retirerExposant');
+
+Route::get('/commandes', [\App\Http\Controllers\CommandeController::class, 'index'])->name('commandes.index');
+Route::post('/commandes', [\App\Http\Controllers\CommandeController::class, 'store'])->name('commandes.store');

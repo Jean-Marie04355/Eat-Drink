@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use App\Models\Commande;
 
 class AdminController extends Controller
 {
@@ -21,8 +22,10 @@ class AdminController extends Controller
     public function index()
     {
         $demandes = User::where('role', 'entrepreneur_en_attente')->get();
-
-        return view('admin.dashboard', compact('demandes'));
+        $entrepreneurs = User::where('role', 'entrepreneur_approuve')->with(['produits.commandes' => function($q) {
+            $q->with('produits');
+        }])->get();
+        return view('admin.dashboard', compact('demandes', 'entrepreneurs'));
     }
 
     // Approuver un utilisateur
@@ -34,6 +37,7 @@ class AdminController extends Controller
             $user->role = 'entrepreneur_approuve';
             $user->motif_rejet = null; // Supprime motif si existait
             $user->save();
+            // Suppression de l'envoi d'email
 
             return redirect()->route('admin.dashboard')->with('status', "L'utilisateur {$user->email} a été approuvé.");
         }

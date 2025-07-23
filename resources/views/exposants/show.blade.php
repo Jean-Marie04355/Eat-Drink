@@ -17,6 +17,12 @@
                         <h5 class="card-title">{{ $produit->nom }}</h5>
                         <p class="card-text">{{ $produit->description }}</p>
                         <p class="card-text"><strong>{{ number_format($produit->prix, 0, ',', ' ') }} FCFA</strong></p>
+                        <form action="{{ route('panier.ajouter', $produit->id) }}" method="POST" class="mt-2">
+                            @csrf
+                            <button type="submit" class="btn btn-success w-100">
+                                <i class="bi bi-cart-plus"></i> Ajouter au panier
+                            </button>
+                        </form>
                     </div>
                 </div>
             </div>
