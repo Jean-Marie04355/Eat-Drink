@@ -15,7 +15,10 @@
                     <div class="alert alert-info mt-4">
                         <i class="bi bi-info-circle"></i> Vous ne pouvez pas accéder à la plateforme tant que votre compte n'est pas validé.
                     </div>
-                    <a href="/logout" class="btn btn-outline-secondary mt-4">Se déconnecter</a>
+                    <form action="{{ route('logout') }}" method="POST" class="d-inline">
+                        @csrf
+                        <button type="submit" class="btn btn-outline-secondary mt-4">Se déconnecter</button>
+                    </form>
                 </div>
             </div>
         </div>
