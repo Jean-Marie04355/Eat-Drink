@@ -36,7 +36,7 @@
             </a>
         </div>
         <div class="col-md-4">
-            <a href="{{ route('panier.index') }}" class="text-decoration-none text-dark">
+            <a href="{{ route('exposants.index') }}" class="text-decoration-none text-dark">
                 <div class="p-4 border rounded-4 shadow-sm h-100 d-flex flex-column justify-content-center bg-white">
                     <div class="mb-3 fs-1">🛒</div>
                     <h3 class="fw-semibold mb-3">Commandes</h3>
