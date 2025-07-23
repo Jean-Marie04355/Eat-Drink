@@ -93,14 +93,6 @@
                                class="btn btn-outline-primary mt-auto mb-2">
                                 <i class="bi bi-eye"></i> Voir détails
                             </a>
-
-                            {{-- Bouton Ajouter au panier d'exposants --}}
-                            <form action="{{ route('panier.ajouterExposant', $exposant->id) }}" method="POST">
-                                @csrf
-                                <button type="submit" class="btn btn-success w-100">
-                                    <i class="bi bi-cart-plus"></i> Ajouter au panier
-                                </button>
-                            </form>
                         </div>
                     </div>
                 </div>
