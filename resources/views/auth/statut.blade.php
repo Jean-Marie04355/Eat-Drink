@@ -7,7 +7,7 @@
     <p class="lead">Merci pour votre inscription à <strong>Eat&Drink</strong>.</p>
     <p>
         Votre demande de stand a bien été enregistrée et est actuellement en cours de validation
-        par notre équipe. 👩‍🍳🧾
+        par notre équipe. 
     </p>
 
     <p>

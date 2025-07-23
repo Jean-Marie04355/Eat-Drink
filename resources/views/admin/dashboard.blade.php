@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="container my-4">
-    <h2 class="mb-4 text-center">📥 Demandes en attente d'approbation</h2>
+    <h2 class="mb-4 text-center">Demandes en attente d'approbation</h2>
 
     @if(session('status'))
         <div class="alert alert-success text-center">{{ session('status') }}</div>
@@ -15,9 +15,9 @@
             <table class="table table-hover align-middle text-center">
                 <thead class="table-dark">
                     <tr>
-                        <th scope="col">📧 Email</th>
-                        <th scope="col">🏢 Entreprise</th>
-                        <th scope="col">⚙️ Actions</th>
+                        <th scope="col">Email</th>
+                        <th scope="col">Entreprise</th>
+                        <th scope="col">Actions</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -30,13 +30,13 @@
                                 <form method="POST" action="{{ route('admin.approuver', $user->id) }}" class="d-inline">
                                     @csrf
                                     <button type="submit" class="btn btn-outline-success btn-sm">
-                                        ✔️ Approuver
+                                         Approuver
                                     </button>
                                 </form>
 
                                 <!-- Rejeter -->
                                 <button type="button" class="btn btn-outline-danger btn-sm" onclick="toggleRejectForm({{ $user->id }})">
-                                    ❌ Rejeter
+                                    Rejeter
                                 </button>
 
                                 <!-- Formulaire de rejet -->

@@ -35,7 +35,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/dashboard', [AdminController::class, 'index'])->name('admin.dashboard');
 
     // Espace exposants — accessible aux utilisateurs connectés (tu peux filtrer les rôles dans le controller)
-   
+
 
 });
 
@@ -47,7 +47,7 @@ Route::post('/panier/{id}', function ($id) {
 
 // Commande
 Route::post('/commande', function () {
-    return redirect()->route('commande.confirmation')->with('status', 'Commande enregistrée avec succès ✨');
+    return redirect()->route('commande.confirmation')->with('status', 'Commande enregistrée avec succès ');
 })->name('commande.store');
 
 Route::view('/confirmation', 'confirmation')->name('commande.confirmation');
@@ -62,20 +62,20 @@ Route::middleware(['auth', 'role:entrepreneur_approuve'])->group(function () {
     Route::get('/entrepreneur/dashboard', [EntrepreneurController::class, 'dashboard'])->name('entrepreneur.dashboard');
 });
 
- Route::get('/exposants', [ExposantController::class, 'index'])->name('exposants.index');
-    Route::get('/exposants/{id}', function ($id) {
-       return view('exposants.produits', ['stand_id' => $id]);
+Route::get('/exposants', [ExposantController::class, 'index'])->name('exposants.index');
+Route::get('/exposants/{id}', function ($id) {
+    return view('exposants.produits', ['stand_id' => $id]);
 })->name('exposants.show');
 
 
-  Route::middleware(['auth', 'role:entrepreneur_approuve'])->prefix('entrepreneur')->name('entrepreneur.')->group(function () {
+Route::middleware(['auth', 'role:entrepreneur_approuve'])->prefix('entrepreneur')->name('entrepreneur.')->group(function () {
     Route::get('/produits', [ProduitController::class, 'index'])->name('produits.index');
     Route::get('/produits/create', [ProduitController::class, 'create'])->name('produits.create');
     Route::post('/produits', [ProduitController::class, 'store'])->name('produits.store');
     Route::get('/produits/{produit}/edit', [ProduitController::class, 'edit'])->name('produits.edit');
     Route::put('/produits/{produit}', [ProduitController::class, 'update'])->name('produits.update');
     Route::delete('/produits/{produit}', [ProduitController::class, 'destroy'])->name('produits.destroy');
-      Route::resource('produits', ProduitController::class);
+    Route::resource('produits', ProduitController::class);
 });
 Route::get('/exposants/{id}/produits', [ExposantController::class, 'produits'])->name('exposants.produits');
 Route::get('/exposants/{id}', [ExposantController::class, 'show'])->name('exposants.show');

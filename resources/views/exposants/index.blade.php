@@ -1,57 +1,35 @@
 @extends('layouts.app')
-
 @section('content')
-<div class="container py-5">
-    <h2 class="mb-5 text-center fw-bold text-primary display-5">🎉 Exposants Approuvés</h2>
+    <div class="container mt-5">
+        <h2 class="text-center fw-bold mb-4" style="color: #7b1e3d;">Nos Exposants Approuvés 👨‍🍳</h2>
 
-    @if($exposants->isEmpty())
-        <div class="alert alert-warning text-center fs-5">
-            Aucun exposant n’est disponible pour le moment.
-        </div>
-    @else
-        <div class="row g-4">
-            @foreach($exposants as $exposant)
-                <div class="col-sm-6 col-md-4 col-lg-3">
-                    <div class="card h-100 shadow-sm border-0 rounded-4 exposant-card p-3 hover-shadow">
-                        <div class="card-body d-flex flex-column">
-                            {{-- Nom entreprise --}}
-                            <h5 class="card-title fw-bold text-center text-primary mb-3">
-                                {{ $exposant->nom_entreprise }}
-                            </h5>
-
-                            {{-- Email --}}
-                            <p class="small mb-1">
-                                <i class="bi bi-envelope text-primary me-1"></i>
-                                <a href="mailto:{{ $exposant->email }}" class="text-decoration-none text-dark">
-                                    {{ $exposant->email }}
+        @if($exposants->isEmpty())
+            <div class="alert text-dark text-center fs-5" style="background-color: #fff8f0; border: 1px solid #5d4037;">
+                Aucun exposant n’est disponible pour le moment.
+            </div>
+        @else
+            <div class="row">
+                @foreach($exposants as $exposant)
+                    <div class="col-md-4 mb-4">
+                        <div class="card h-100 shadow-sm">
+                            <div class="card-body text-center">
+                                <!-- Nom entreprise -->
+                                <h5 class="card-title fw-semibold">
+                                    {{ $exposant->nom_entreprise }}
+                                </h5>
+                                <!-- Catégorie du stand -->
+                                <p class="text-muted">
+                                    {{ $exposant->categorie ?? 'Catégorie non définie' }}
+                                </p>
+                                <a href="{{ route('exposants.show', $exposant->id) }}" class="btn btn-sm"
+                                   style="background-color: #7b1e3d; color: white;">
+                                   Voir le stand
                                 </a>
-                            </p>
-
-                            {{-- Téléphone --}}
-                            @if($exposant->telephone)
-                            <p class="small mb-2">
-                                <i class="bi bi-telephone text-success me-1"></i>
-                                {{ $exposant->telephone }}
-                            </p>
-                            @endif
-
-                            {{-- Secteur en badge --}}
-                            @if(!empty($exposant->secteur))
-                                <span class="badge bg-info text-dark w-fit mb-3">
-                                    {{ $exposant->secteur }}
-                                </span>
-                            @endif
-
-                            {{-- Bouton détails --}}
-                            <a href="{{ route('exposants.show', $exposant->id) }}" 
-                               class="btn btn-outline-primary mt-auto">
-                                <i class="bi bi-eye"></i> Voir détails
-                            </a>
+                            </div>
                         </div>
                     </div>
-                </div>
-            @endforeach
-        </div>
-    @endif
-</div>
+                @endforeach
+            </div>
+        @endif
+    </div>
 @endsection

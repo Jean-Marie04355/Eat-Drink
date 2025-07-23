@@ -2,7 +2,7 @@
  @extends('layouts.app')
 @section('content')
 <div class="container">
-    <h2>Votre panier 🛍️</h2>
+    <h2>Votre panier</h2>
     <ul class="list-group">
         @foreach($panier as $produit)
             <li class="list-group-item d-flex justify-content-between align-items-center">

@@ -14,7 +14,10 @@
                     @if(Auth::user()->role === 'admin')
                         <li class="nav-item"><a class="nav-link" href="{{ route('admin.dashboard') }}">Admin</a></li>
                     @elseif(Auth::user()->role === 'entrepreneur_approuve')
-                       <li class="nav-item"><a class="nav-link" href="{{ route('entrepreneur.dashboard') }}">Mon stand</a></li>
+                       <li class="nav-item"><a class="nav-link" href="{{ route('entrepreneur.dashboard') }}">Accueil</a></li>
+                       <li class="nav-item"><a class="nav-link" href="{{ route('entrepreneur.produits.index') }}">Produits</a></li>
+                       <li class="nav-item"><a class="nav-link" href="{{ route('entrepreneur.dashboard') }}">Commandes</a></li>
+                       <li class="nav-item"><a class="nav-link" href="/exposants/{{ Auth::user()->id }}">Stand</a></li>
                     @elseif(Auth::user()->role === 'entrepreneur_en_attente')
                         <li class="nav-item"><a class="nav-link" href="{{ route('auth.statut') }}">Statut</a></li>
                     @endif
