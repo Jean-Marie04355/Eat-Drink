@@ -23,5 +23,5 @@ Plateforme web pour gérer l'événement culinaire Eat&Drink : inscriptions des 
 
 ## Équipe – Groupe 7  
 - ZANNOU Floriane (Cheffe de projet)  
-- ISSOUMA Nafissatou  
-- OKOTCHE Jean-Marie 
+- ISSOUMA Nafissatou (front-end)
+- OKOTCHE Jean-Marie (back-end)
