@@ -16,6 +16,11 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         // $schedule->command('inspire')->hourly();
+        
+        // Vérifier les restrictions expirées toutes les heures
+        $schedule->command('restrictions:check-expired')
+                ->hourly()
+                ->appendOutputTo(storage_path('logs/restrictions.log'));
     }
 
     /**
