@@ -68,6 +68,7 @@ class EntrepreneurController extends Controller
 
         return view('entrepreneur.dashboard', compact(
             'commandes',
+            'produits',
             'total_produits',
             'total_commandes',
             'total_ventes',
@@ -79,14 +80,25 @@ class EntrepreneurController extends Controller
 
     public function updateStatus(Request $request, $id)
     {
-        $commande = Commande::findOrFail($id);
+        try {
+            $request->validate([
+                'statut' => 'required|string|in:en_attente,en_preparation,prete,terminee,annulee'
+            ]);
 
-        // Vérifier que c'est bien une commande liée à cet entrepreneur (sécurité basique)
-        // Note: Dans un vrai système multi-vendeurs, il faudrait vérifier item par item
+            $commande = Commande::findOrFail($id);
+            $commande->statut = $request->statut;
+            $commande->save();
 
-        $commande->statut = $request->statut;
-        $commande->save();
-
-        return response()->json(['success' => true, 'statut' => $commande->statut]);
+            return response()->json([
+                'success' => true,
+                'statut' => $commande->statut,
+                'message' => 'Statut de la commande mis à jour.'
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Erreur de mise à jour: ' . $e->getMessage()
+            ], 500);
+        }
     }
 }

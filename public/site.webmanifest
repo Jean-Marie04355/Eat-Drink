@@ -1,0 +1,17 @@
+{
+  "name": "Eat&Drink",
+  "short_name": "Eat&Drink",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0f172a",
+  "theme_color": "#0f172a",
+  "description": "Plateforme web Eat&Drink - Gastronomie et Événements",
+  "icons": [
+    {
+      "src": "/images/logo.svg",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

@@ -175,6 +175,35 @@
         .gold-glow {
             text-shadow: 0 0 15px rgba(212, 175, 55, 0.5);
         }
+
+        @media (max-width: 768px) {
+            .luxury-checkout-wrapper {
+                padding-top: 2rem;
+                padding-bottom: 5rem;
+            }
+            .luxury-heading {
+                font-size: 2.1rem !important;
+                margin-bottom: 1.5rem !important;
+            }
+            .luxury-form-card {
+                padding: 1.25rem !important;
+                border-radius: 20px !important;
+            }
+            .luxury-input {
+                padding: 14px 18px !important;
+                font-size: 16px !important;
+                border-radius: 14px !important;
+            }
+            .luxury-type-card {
+                padding: 1.2rem !important;
+                border-radius: 16px !important;
+            }
+            .luxury-btn-submit {
+                padding: 1rem 1.5rem !important;
+                font-size: 0.9rem !important;
+                border-radius: 16px !important;
+            }
+        }
     </style>
 
     <div class="luxury-checkout-wrapper">

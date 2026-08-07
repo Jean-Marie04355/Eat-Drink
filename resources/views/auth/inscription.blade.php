@@ -275,5 +275,25 @@
             margin-top: 0.4rem;
             display: block;
         }
+
+        @media (max-width: 768px) {
+            .auth-card {
+                padding: 1.5rem 1.25rem !important;
+                border-radius: 20px !important;
+            }
+            .auth-title {
+                font-size: 1.8rem !important;
+            }
+            .form-control-luxury {
+                padding: 0.85rem 1rem 0.85rem 2.8rem !important;
+                font-size: 16px !important;
+                border-radius: 14px !important;
+            }
+            .btn-luxury {
+                padding: 1rem !important;
+                font-size: 0.88rem !important;
+                border-radius: 14px !important;
+            }
+        }
     </style>
 @endsection

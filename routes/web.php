@@ -15,6 +15,14 @@ use App\Http\Controllers\RestrictionController;
 Route::view('/', 'accueil')->name('accueil');
 Route::view('/accueil', 'accueil')->name('accueil');
 
+// PWA routes
+Route::get('/site.webmanifest', function () {
+    return response()->file(public_path('site.webmanifest'), ['Content-Type' => 'application/manifest+json']);
+});
+Route::get('/sw.js', function () {
+    return response()->file(public_path('sw.js'), ['Content-Type' => 'application/javascript']);
+});
+
 // Club Privé (Fidélité)
 Route::get('/club-prive', function () {
     $user = auth()->user();
@@ -149,3 +157,12 @@ Route::middleware(['auth', 'check.restrictions'])->group(function () {
         Route::post('/retirer/{id}', [PanierController::class, 'retirerExposant'])->name('panier.retirerExposant');
     });
 });
+
+// Fallback route pour servir les fichiers de storage (images produits & logos)
+Route::get('/storage/{path}', function ($path) {
+    $filePath = storage_path('app/public/' . $path);
+    if (!file_exists($filePath)) {
+        abort(404);
+    }
+    return response()->file($filePath);
+})->where('path', '.*');

@@ -38,11 +38,9 @@ class AdminController extends Controller
             'demandes_attente' => User::where('role', 'entrepreneur_en_attente')->count(),
             'approuves_aujourdhui' => User::where('role', 'entrepreneur_approuve')
                 ->whereDate('updated_at', now()->toDateString())
-                ->whereColumn('updated_at', '>', 'created_at')
                 ->count(),
             'rejetes_aujourdhui' => User::where('role', 'rejeté')
                 ->whereDate('updated_at', now()->toDateString())
-                ->whereColumn('updated_at', '>', 'created_at')
                 ->count(),
             'total_commandes' => \App\Models\Commande::count(),
             'total_produits' => \App\Models\Produit::count(),
@@ -56,45 +54,29 @@ class AdminController extends Controller
 
         // Récupérer les 5 entrepreneurs avec le plus de commandes
         $top_entrepreneurs = User::where('role', 'entrepreneur_approuve')
-            ->withCount([
-                'commandes' => function ($query) {
-                    $query->where('created_at', '>=', now()->subMonth());
-                }
-            ])
-            ->orderByDesc('commandes_count')
-            ->limit(5)
+            ->with(['produits.commandes'])
             ->get()
             ->map(function ($user) {
+                $commandesCount = 0;
+                foreach ($user->produits as $produit) {
+                    $commandesCount += $produit->commandes->count();
+                }
                 return [
                     'id' => $user->id,
                     'nom_entreprise' => $user->nom_entreprise,
                     'email' => $user->email,
-                    'commandes_count' => $user->commandes_count,
+                    'commandes_count' => $commandesCount,
                     'created_at' => $user->created_at->format('Y-m-d H:i:s')
                 ];
-            });
-
-        // Récupérer les activités récentes (ex: 10 dernières)
-        $activites_recentes = [];
-        /* \App\Models\Activite::with('user')
-            ->latest()
-            ->limit(10)
-            ->get()
-            ->map(function($activite) {
-                return [
-                    'id' => $activite->id,
-                    'type' => $activite->type,
-                    'description' => $activite->description,
-                    'user_name' => $activite->user ? $activite->user->nom_entreprise : 'Système',
-                    'created_at' => $activite->created_at->format('Y-m-d H:i:s'),
-                    'time_ago' => $activite->created_at->diffForHumans()
-                ];
-            }); */
+            })
+            ->sortByDesc('commandes_count')
+            ->take(5)
+            ->values();
 
         return response()->json([
             'stats' => $stats,
             'top_entrepreneurs' => $top_entrepreneurs,
-            'activites_recentes' => $activites_recentes,
+            'activites_recentes' => [],
             'updated_at' => now()->format('Y-m-d H:i:s')
         ]);
     }
@@ -342,7 +324,7 @@ class AdminController extends Controller
     }
 
     // Approuver un utilisateur
-    public function approuver($id)
+    public function approuver(Request $request, $id)
     {
         try {
             $user = User::findOrFail($id);
@@ -352,22 +334,24 @@ class AdminController extends Controller
                 $user->motif_rejet = null; // Supprime le motif s'il existe
                 $user->save();
 
-                return response()->json([
-                    'success' => true,
-                    'message' => "L'utilisateur {$user->email} a été approuvé avec succès."
-                ]);
+                $message = "L'utilisateur {$user->email} a été approuvé avec succès.";
+                if ($request->ajax() || $request->wantsJson()) {
+                    return response()->json(['success' => true, 'message' => $message]);
+                }
+                return redirect()->back()->with('status', $message);
             }
 
-            return response()->json([
-                'success' => false,
-                'message' => "Impossible d'approuver cet utilisateur."
-            ], 400);
+            $errMsg = "Impossible d'approuver cet utilisateur.";
+            if ($request->ajax() || $request->wantsJson()) {
+                return response()->json(['success' => false, 'message' => $errMsg], 400);
+            }
+            return redirect()->back()->with('error', $errMsg);
 
         } catch (\Exception $e) {
-            return response()->json([
-                'success' => false,
-                'message' => "Une erreur est survenue : " . $e->getMessage()
-            ], 500);
+            if ($request->ajax() || $request->wantsJson()) {
+                return response()->json(['success' => false, 'message' => "Une erreur est survenue : " . $e->getMessage()], 500);
+            }
+            return redirect()->back()->with('error', "Une erreur est survenue : " . $e->getMessage());
         }
     }
 
@@ -386,22 +370,24 @@ class AdminController extends Controller
                 $user->motif_rejet = $request->motif_rejet;
                 $user->save();
 
-                return response()->json([
-                    'success' => true,
-                    'message' => "L'utilisateur {$user->email} a été rejeté avec succès."
-                ]);
+                $message = "L'utilisateur {$user->email} a été rejeté avec succès.";
+                if ($request->ajax() || $request->wantsJson()) {
+                    return response()->json(['success' => true, 'message' => $message]);
+                }
+                return redirect()->back()->with('status', $message);
             }
 
-            return response()->json([
-                'success' => false,
-                'message' => "Impossible de rejeter cet utilisateur."
-            ], 400);
+            $errMsg = "Impossible de rejeter cet utilisateur.";
+            if ($request->ajax() || $request->wantsJson()) {
+                return response()->json(['success' => false, 'message' => $errMsg], 400);
+            }
+            return redirect()->back()->with('error', $errMsg);
 
         } catch (\Exception $e) {
-            return response()->json([
-                'success' => false,
-                'message' => "Une erreur est survenue : " . $e->getMessage()
-            ], 500);
+            if ($request->ajax() || $request->wantsJson()) {
+                return response()->json(['success' => false, 'message' => "Une erreur est survenue : " . $e->getMessage()], 500);
+            }
+            return redirect()->back()->with('error', "Une erreur est survenue : " . $e->getMessage());
         }
     }
 

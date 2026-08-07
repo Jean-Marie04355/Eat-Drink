@@ -14,38 +14,91 @@
         </button>
 
         <div class="collapse navbar-collapse" id="navLuxury">
-            <ul class="navbar-nav mx-auto mb-2 mb-lg-0 gap-lg-3">
-                <li class="nav-item">
-                    <a class="nav-link-luxury {{ request()->is('accueil') ? 'active' : '' }}"
-                        href="/accueil">Accueil</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link-luxury {{ request()->routeIs('exposants.*') ? 'active' : '' }}"
-                        href="{{ route('exposants.index') }}">Exposants</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link-luxury {{ request()->routeIs('panier') ? 'active' : '' }}"
-                        href="{{ route('panier') }}">
-                        Panier
-                        @if(session('panier') && count(session('panier')) > 0)
-                            <span class="luxury-badge">{{ count(session('panier')) }}</span>
-                        @endif
-                    </a>
-                </li>
-                <li class="nav-item">
-                    @auth
-                        <a class="nav-link-luxury {{ request()->routeIs('commandes.index') ? 'active' : '' }}"
-                            href="{{ route('commandes.index') }}">
-                            Suivi & Commandes
-                            @if($activeOrder = Auth::user()->getActiveOrder())
-                                <span class="active-pulse-badge"></span>
+                @if(request()->is('entrepreneur*'))
+                    <!-- Liens spécifiques aux pages d'administration Entrepreneur -->
+                    <li class="nav-item">
+                        <a class="nav-link-luxury {{ request()->routeIs('entrepreneur.dashboard') ? 'active' : '' }}"
+                            href="{{ route('entrepreneur.dashboard') }}">
+                            <i class="fas fa-chart-line me-1"></i> Tableau de bord
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link-luxury {{ request()->routeIs('entrepreneur.produits.index') ? 'active' : '' }}"
+                            href="{{ route('entrepreneur.produits.index') }}">
+                            <i class="fas fa-utensils me-1"></i> Ma Carte & Produits
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link-luxury {{ request()->routeIs('entrepreneur.produits.create') ? 'active' : '' }}"
+                            href="{{ route('entrepreneur.produits.create') }}">
+                            <i class="fas fa-plus-circle me-1"></i> Nouveau Plat
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link-luxury" href="{{ route('exposants.show', Auth::id()) }}" target="_blank">
+                            <i class="fas fa-external-link-alt me-1"></i> Aperçu Mon Stand
+                        </a>
+                    </li>
+                @elseif(request()->is('admin*') || request()->is('dashboard*'))
+                    <!-- Liens spécifiques Admin -->
+                    <li class="nav-item">
+                        <a class="nav-link-luxury {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}"
+                            href="{{ route('admin.dashboard') }}">
+                            <i class="fas fa-shield-alt me-1"></i> Panel Admin
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link-luxury {{ request()->routeIs('admin.commandes-entrepreneurs') ? 'active' : '' }}"
+                            href="{{ route('admin.commandes-entrepreneurs') }}">
+                            <i class="fas fa-boxes me-1"></i> Logistique
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link-luxury {{ request()->routeIs('admin.statistiques') ? 'active' : '' }}"
+                            href="{{ route('admin.statistiques') }}">
+                            <i class="fas fa-chart-bar me-1"></i> Statistiques
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link-luxury {{ request()->routeIs('admin.restrictions') ? 'active' : '' }}"
+                            href="{{ route('admin.restrictions') }}">
+                            <i class="fas fa-lock me-1"></i> Restrictions
+                        </a>
+                    </li>
+                @else
+                    <!-- Liens Clients & Visiteurs -->
+                    <li class="nav-item">
+                        <a class="nav-link-luxury {{ request()->is('accueil') ? 'active' : '' }}"
+                            href="/accueil">Accueil</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link-luxury {{ request()->routeIs('exposants.*') ? 'active' : '' }}"
+                            href="{{ route('exposants.index') }}">Exposants</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link-luxury {{ request()->routeIs('panier') ? 'active' : '' }}"
+                            href="{{ route('panier') }}">
+                            Panier
+                            @if(session('panier') && count(session('panier')) > 0)
+                                <span class="luxury-badge">{{ count(session('panier')) }}</span>
                             @endif
                         </a>
-                    @else
-                        <a class="nav-link-luxury {{ request()->routeIs('commandes.rechercher') ? 'active' : '' }}"
-                            href="{{ route('commandes.rechercher') }}">Suivre Commande</a>
-                    @endauth
-                </li>
+                    </li>
+                    <li class="nav-item">
+                        @auth
+                            <a class="nav-link-luxury {{ request()->routeIs('commandes.index') ? 'active' : '' }}"
+                                href="{{ route('commandes.index') }}">
+                                Suivi & Commandes
+                                @if($activeOrder = Auth::user()->getActiveOrder())
+                                    <span class="active-pulse-badge"></span>
+                                @endif
+                            </a>
+                        @else
+                            <a class="nav-link-luxury {{ request()->routeIs('commandes.rechercher') ? 'active' : '' }}"
+                                href="{{ route('commandes.rechercher') }}">Suivre Commande</a>
+                        @endauth
+                    </li>
+                @endif
             </ul>
 
             <div class="d-flex align-items-center gap-4">

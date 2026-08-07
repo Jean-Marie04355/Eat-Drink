@@ -10,7 +10,7 @@
             </div>
 
             <div class="container hero-content">
-                <div class="row align-items-center min-vh-100">
+                <div class="row align-items-center py-4">
                     <div class="col-lg-8 text-center text-lg-start animate-fade-up">
                         <span class="badge-premium mb-3">L'EXPÉRIENCE GASTRONOMIQUE ULTIME</span>
                         <h1 class="display-1 hero-title mb-4">
@@ -30,6 +30,11 @@
                                 <i class="fas fa-shopping-bag me-2"></i>
                                 MON PANIER
                             </a>
+                        </div>
+                        <div class="mobile-quick-pills d-md-none mt-4 d-flex justify-content-center gap-2 flex-wrap">
+                            <a href="{{ route('exposants.index') }}" class="mobile-pill"><i class="fas fa-store text-gold"></i> Stands</a>
+                            <a href="{{ route('panier') }}" class="mobile-pill"><i class="fas fa-shopping-bag text-emerald"></i> Panier</a>
+                            <a href="{{ route('commandes.rechercher') }}" class="mobile-pill"><i class="fas fa-search text-white"></i> Suivi</a>
                         </div>
                     </div>
                 </div>
@@ -301,7 +306,8 @@
         /* Hero Styling */
         .hero-luxury {
             position: relative;
-            height: 100vh;
+            min-height: calc(100vh - 105px);
+            padding: 3rem 0 5rem;
             overflow: hidden;
             display: flex;
             align-items: center;
@@ -699,6 +705,91 @@
             to {
                 opacity: 1;
                 transform: translateY(0);
+            }
+        }
+
+        /* Mobile Responsive Enhancements */
+        .mobile-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 16px;
+            background: rgba(255, 255, 255, 0.07);
+            border: 1px solid rgba(212, 175, 55, 0.25);
+            border-radius: 50px;
+            color: white;
+            text-decoration: none !important;
+            font-size: 0.82rem;
+            font-weight: 600;
+            backdrop-filter: blur(10px);
+            transition: all 0.2s ease;
+        }
+
+        .mobile-pill:active {
+            transform: scale(0.95);
+            background: rgba(212, 175, 55, 0.2);
+        }
+
+        .text-emerald {
+            color: #10b981 !important;
+        }
+
+        @media (max-width: 768px) {
+            .hero-luxury {
+                height: auto !important;
+                min-height: 85vh;
+                padding-top: 5rem;
+                padding-bottom: 3rem;
+            }
+            .hero-title {
+                font-size: 2.1rem !important;
+                line-height: 1.25;
+            }
+            .hero-lead {
+                font-size: 0.98rem;
+                margin-bottom: 1.8rem !important;
+            }
+            .hero-btns {
+                display: flex;
+                flex-direction: column;
+                width: 100%;
+                gap: 0.8rem !important;
+            }
+            .btn-luxury-primary, .btn-luxury-outline {
+                width: 100%;
+                text-align: center;
+                padding: 0.95rem 1.5rem;
+                font-size: 0.88rem;
+                justify-content: center;
+            }
+            .hero-scroll-indicator {
+                display: none;
+            }
+            .glass-card-luxury {
+                padding: 1.5rem 1.25rem !important;
+                border-radius: 1.5rem !important;
+            }
+            .card-icon-wrapper {
+                font-size: 2.2rem !important;
+                margin-bottom: 1rem !important;
+            }
+            .card-title-luxury {
+                font-size: 1.4rem !important;
+                margin-bottom: 0.8rem !important;
+            }
+            .card-text-luxury {
+                font-size: 0.9rem !important;
+                margin-bottom: 1.2rem !important;
+            }
+            .section-title-luxury {
+                font-size: 1.9rem !important;
+            }
+            .nav-cards-section, .features-section, .elite-game-section {
+                padding-top: 2rem !important;
+                padding-bottom: 2rem !important;
+            }
+            .feature-item {
+                padding: 1.2rem 0.8rem !important;
             }
         }
     </style>

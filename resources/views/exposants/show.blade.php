@@ -261,6 +261,36 @@
             box-shadow: none;
             transform: none;
         }
+
+        @media (max-width: 768px) {
+            .hero-luxury {
+                height: 260px !important;
+            }
+            .luxury-profile-card {
+                padding: 70px 1.25rem 1.5rem !important;
+                border-radius: 28px !important;
+                margin-top: -90px !important;
+            }
+            .luxury-logo-wrapper {
+                width: 110px !important;
+                height: 110px !important;
+                top: -55px !important;
+                border-radius: 28px !important;
+                padding: 8px !important;
+            }
+            .luxury-heading-main {
+                font-size: 2.2rem !important;
+            }
+            .luxury-card-produit {
+                border-radius: 20px !important;
+            }
+            .product-image-container {
+                height: 180px !important;
+            }
+            .product-content-wrapper {
+                padding: 1.25rem !important;
+            }
+        }
     </style>
 
     <div class="luxury-page-wrapper">
@@ -344,7 +374,7 @@
                             style="animation-delay: {{ $index * 0.1 }}s">
                             <div class="luxury-product-card d-flex flex-column">
                                 <div class="luxury-img-container">
-                                    <img src="{{ $produit->photo ? asset('storage/' . $produit->photo) : 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c' }}"
+                                    <img src="{{ $produit->photo ? (\Illuminate\Support\Str::startsWith($produit->photo, 'http') ? $produit->photo : asset('storage/' . $produit->photo)) : 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c' }}"
                                         class="luxury-img {{ !$produit->est_disponible ? 'grayscale' : '' }}"
                                         alt="{{ $produit->nom }}">
                                     <div class="luxury-price-tag">{{ number_format($produit->prix, 0, ',', ' ') }} <span
@@ -357,7 +387,7 @@
                                     @endif
                                 </div>
 
-                                <div class="p-5 d-flex flex-column flex-grow-1 text-center">
+                                <div class="p-4 p-md-5 d-flex flex-column flex-grow-1 text-center">
                                     <span class="text-gold small fw-800 letter-spacing-2 mb-2">SIGNATURE</span>
                                     <h4 class="fw-800 mb-3 text-white" style="font-family: 'Playfair Display', serif;">
                                         {{ $produit->nom }}</h4>

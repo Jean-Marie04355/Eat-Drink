@@ -53,7 +53,7 @@
         .sidebar {
             width: 280px;
             height: 100vh;
-            background: rgba(15, 23, 42, 0.8);
+            background: rgba(15, 23, 42, 0.95);
             backdrop-filter: blur(20px);
             border-right: 1px solid var(--luxury-border);
             position: fixed;
@@ -61,12 +61,16 @@
             top: 0;
             z-index: 1000;
             transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
         }
 
         .sidebar-brand {
-            padding: 2.5rem 1.5rem;
+            padding: 1.8rem 1.5rem;
             text-align: center;
             border-bottom: 1px solid var(--luxury-border);
+            flex-shrink: 0;
         }
 
         .brand-text {
@@ -85,6 +89,17 @@
 
         .nav-section {
             padding: 1.5rem 1rem;
+            flex: 1;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .nav-section::-webkit-scrollbar {
+            width: 4px;
+        }
+        .nav-section::-webkit-scrollbar-thumb {
+            background: rgba(212, 175, 55, 0.4);
+            border-radius: 10px;
         }
 
         .nav-label {
@@ -144,12 +159,14 @@
 
         /* Sidebar Footer */
         .sidebar-footer {
-            position: absolute;
-            bottom: 0;
+            position: relative;
+            bottom: auto;
             width: 100%;
-            padding: 1.5rem;
+            padding: 1.25rem 1.5rem;
             border-top: 1px solid var(--luxury-border);
-            background: rgba(0, 0, 0, 0.2);
+            background: rgba(15, 23, 42, 0.95);
+            flex-shrink: 0;
+            margin-top: auto;
         }
 
         .user-info {
@@ -208,10 +225,20 @@
 
             .main-content {
                 margin-left: 0;
+                padding: 4.5rem 1rem 2rem !important;
             }
 
             .mobile-toggle {
                 display: block !important;
+            }
+
+            .premium-title {
+                font-size: 1.8rem !important;
+            }
+
+            .glass-stat-card, .glass-card-luxury {
+                padding: 1.25rem !important;
+                border-radius: 20px !important;
             }
         }
 

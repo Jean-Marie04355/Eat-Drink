@@ -199,6 +199,39 @@
                 margin-top: 3rem;
             }
         }
+
+        @media (max-width: 768px) {
+            .luxury-cart-wrapper {
+                padding-top: 2rem;
+                padding-bottom: 5rem;
+            }
+            .luxury-heading {
+                font-size: 2.2rem !important;
+                margin-bottom: 0.8rem;
+            }
+            .luxury-card {
+                padding: 1.25rem !important;
+                border-radius: 20px !important;
+            }
+            .cart-item-luxury {
+                flex-direction: column !alignment: flex-start;
+                align-items: stretch;
+                gap: 15px;
+                padding: 1.25rem !important;
+                border-radius: 18px !important;
+            }
+            .cart-item-luxury:hover {
+                transform: none !important;
+            }
+            .item-img-luxury {
+                width: 90px;
+                height: 90px;
+            }
+            .btn-checkout-luxury {
+                padding: 1rem 1.5rem !important;
+                font-size: 0.9rem !important;
+            }
+        }
     </style>
 
     <div class="luxury-cart-wrapper">

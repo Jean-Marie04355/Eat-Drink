@@ -205,6 +205,30 @@
             color: var(--luxury-dark);
             box-shadow: 0 10px 20px rgba(212, 175, 55, 0.2);
         }
+
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 2.3rem !important;
+                margin-bottom: 0.8rem;
+            }
+            .luxury-index-wrapper {
+                padding-top: 2rem;
+                padding-bottom: 4rem;
+            }
+            .exposant-logo-container {
+                height: 130px !important;
+                padding: 15px;
+            }
+            .luxury-card-exposant .p-5 {
+                padding: 1.25rem !important;
+            }
+            .luxury-card-exposant {
+                border-radius: 24px !important;
+            }
+            .row.g-5 {
+                --bs-gutter-y: 1.25rem !important;
+            }
+        }
     </style>
 
     <div class="luxury-index-wrapper">
@@ -222,14 +246,14 @@
                 </p>
             </div>
 
-            <div class="search-lux-container">
+            <div class="search-lux-container mb-5">
                 <i class="fas fa-search search-icon-lux"></i>
-                <input type="text" class="search-lux-input" placeholder="Quel voyage gustatif recherchez-vous ?">
-                <div class="d-flex justify-content-center gap-3 mt-4 flex-wrap">
+                <input type="text" id="searchInput" class="search-lux-input" placeholder="Quel voyage gustatif recherchez-vous ?">
+                <div class="d-flex justify-content-center gap-2 gap-md-3 mt-4 flex-wrap" id="filterChips">
                     @php $secteurs = $exposants->pluck('secteur')->unique()->filter(); @endphp
-                    <div class="filter-chip active">Tous les Stands</div>
+                    <div class="filter-chip active" data-filter="all">Tous les Stands</div>
                     @foreach($secteurs as $secteur)
-                        <div class="filter-chip">{{ $secteur }}</div>
+                        <div class="filter-chip" data-filter="{{ strtolower($secteur) }}">{{ $secteur }}</div>
                     @endforeach
                 </div>
             </div>
@@ -241,12 +265,14 @@
                     <p>De nouvelles expériences gastronomiques arrivent bientôt.</p>
                 </div>
             @else
-                <div class="row g-5">
+                <div class="row g-4" id="exposantsGrid">
                     @foreach($exposants as $index => $exposant)
-                        <div class="col-md-6 col-lg-4 col-xl-3 animate__animated animate__fadeInUp"
-                            style="animation-delay: {{ $index * 0.1 }}s">
-                            <a href="{{ route('exposants.show', $exposant->id) }}" class="text-decoration-none">
-                                <div class="luxury-card-exposant d-flex flex-column">
+                        <div class="col-md-6 col-lg-4 col-xl-3 exposant-card-col animate__animated animate__fadeInUp"
+                            style="animation-delay: {{ $index * 0.05 }}s"
+                            data-name="{{ strtolower($exposant->nom_entreprise . ' ' . $exposant->description) }}"
+                            data-secteur="{{ strtolower($exposant->secteur ?? '') }}">
+                            <a href="{{ route('exposants.show', $exposant->id) }}" class="text-decoration-none h-100 d-block">
+                                <div class="luxury-card-exposant d-flex flex-column h-100">
                                     @if($exposant->secteur)
                                         <div class="luxury-badge-sector">{{ $exposant->secteur }}</div>
                                     @endif
@@ -256,16 +282,16 @@
                                             alt="{{ $exposant->nom_entreprise }}">
                                     </div>
 
-                                    <div class="p-5 text-center d-flex flex-column flex-grow-1">
-                                        <div class="exposant-stats-badge mx-auto">
-                                            <i class="fas fa-certificate"></i> PARTENAIRE CERTIFIÉ
+                                    <div class="p-4 p-md-5 text-center d-flex flex-column flex-grow-1">
+                                        <div class="exposant-stats-badge mx-auto mb-3">
+                                            <i class="fas fa-certificate me-1"></i> PARTENAIRE CERTIFIÉ
                                         </div>
-                                        <h4 class="fw-800 text-white mb-3">{{ $exposant->nom_entreprise }}</h4>
+                                        <h4 class="fw-800 text-white mb-2 fs-5">{{ $exposant->nom_entreprise }}</h4>
                                         <p class="text-white-50 small mb-4 flex-grow-1">
                                             {{ \Illuminate\Support\Str::limit($exposant->description ?: "Une signature gastronomique unique alliant tradition et excellence.", 90) }}
                                         </p>
 
-                                        <div class="btn-view-profile">
+                                        <div class="btn-view-profile mt-auto">
                                             DÉCOUVRIR LE STAND
                                         </div>
                                     </div>
@@ -274,7 +300,65 @@
                         </div>
                     @endforeach
                 </div>
+
+                <div id="noResults" class="text-center py-5 d-none opacity-50">
+                    <i class="fas fa-search fa-3x mb-3 text-gold"></i>
+                    <h4 class="fw-700">Aucun stand ne correspond à votre recherche</h4>
+                    <p class="small">Essayez un autre mot-clé ou modifiez la catégorie sélectionnée.</p>
+                </div>
             @endif
         </div>
     </div>
+
+    @push('scripts')
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const searchInput = document.getElementById('searchInput');
+            const chips = document.querySelectorAll('#filterChips .filter-chip');
+            const cardCols = document.querySelectorAll('.exposant-card-col');
+            const noResults = document.getElementById('noResults');
+            let currentFilter = 'all';
+
+            function filterStands() {
+                const query = searchInput ? searchInput.value.toLowerCase().trim() : '';
+                let visibleCount = 0;
+
+                cardCols.forEach(col => {
+                    const name = col.getAttribute('data-name') || '';
+                    const secteur = col.getAttribute('data-secteur') || '';
+                    const matchesSearch = !query || name.includes(query);
+                    const matchesFilter = currentFilter === 'all' || secteur.includes(currentFilter);
+
+                    if (matchesSearch && matchesFilter) {
+                        col.classList.remove('d-none');
+                        visibleCount++;
+                    } else {
+                        col.classList.add('d-none');
+                    }
+                });
+
+                if (noResults) {
+                    if (visibleCount === 0) {
+                        noResults.classList.remove('d-none');
+                    } else {
+                        noResults.classList.add('d-none');
+                    }
+                }
+            }
+
+            if (searchInput) {
+                searchInput.addEventListener('input', filterStands);
+            }
+
+            chips.forEach(chip => {
+                chip.addEventListener('click', function() {
+                    chips.forEach(c => c.classList.remove('active'));
+                    this.classList.add('active');
+                    currentFilter = this.getAttribute('data-filter') || 'all';
+                    filterStands();
+                });
+            });
+        });
+    </script>
+    @endpush
 @endsection

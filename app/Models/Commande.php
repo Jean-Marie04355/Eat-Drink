@@ -27,7 +27,11 @@ class Commande extends Model
             }
 
             $send = function () use ($email, $commande) {
-                Notification::route('mail', $email)->notify(new CommandeStatutNotification($commande));
+                try {
+                    Notification::route('mail', $email)->notify(new CommandeStatutNotification($commande));
+                } catch (\Exception $e) {
+                    \Illuminate\Support\Facades\Log::error("Erreur d'envoi notification mail: " . $e->getMessage());
+                }
             };
 
             if (DB::transactionLevel() > 0) {

@@ -62,7 +62,8 @@
                         <p class="stat-label">EXPIRATIONS (24H)</p>
                         <h2 class="stat-value" id="expiringToday">
                             {{ $restrictions->filter(function ($r) {
-        return $r->end_date->isToday(); })->count() }}</h2>
+                                return $r->end_date && $r->end_date->isToday();
+                            })->count() }}</h2>
                     </div>
                     <div class="stat-glow blue"></div>
                 </div>

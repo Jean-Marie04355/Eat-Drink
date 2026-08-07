@@ -3,7 +3,15 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#0f172a">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Eat&Drink">
+    <link rel="manifest" href="/manifest.json">
+    <link rel="icon" type="image/svg+xml" href="/images/logo.svg">
+    <link rel="apple-touch-icon" href="/images/logo.svg">
     <title>Eat&Drink Premium</title>
 
     <!-- Fonts -->
@@ -54,12 +62,95 @@
 
         .container-main {
             min-height: 80vh;
+            padding-top: 105px;
         }
 
         /* Selection color */
         ::selection {
             background: var(--luxury-gold);
             color: #000;
+        }
+
+        /* Global Mobile Optimization System */
+        @media (max-width: 991px) {
+            .container-main {
+                padding-top: 95px;
+                padding-bottom: 85px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            html, body {
+                max-width: 100vw;
+                overflow-x: hidden;
+            }
+
+            /* Responsive Typography */
+            h1, .display-1, .display-2, .display-3, .display-4 {
+                font-size: clamp(1.75rem, 6vw, 2.5rem) !important;
+                line-height: 1.25 !important;
+            }
+
+            h2 {
+                font-size: clamp(1.4rem, 5vw, 2rem) !important;
+            }
+
+            h3 {
+                font-size: clamp(1.2rem, 4.5vw, 1.6rem) !important;
+            }
+
+            .lead, p {
+                font-size: 0.95rem;
+            }
+
+            /* Inputs & Forms Touch Target Optimization */
+            input[type="text"],
+            input[type="email"],
+            input[type="password"],
+            input[type="number"],
+            input[type="tel"],
+            select,
+            textarea {
+                font-size: 16px !important; /* Prevents auto-zoom in Safari iOS */
+                padding: 0.75rem 1rem !important;
+                border-radius: 12px !important;
+            }
+
+            .btn {
+                min-height: 44px;
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                border-radius: 12px;
+                font-size: 0.9rem;
+            }
+
+            /* Cards & Modals Padding */
+            .glass-card-luxury,
+            .card,
+            .auth-card,
+            .modal-content {
+                padding: 1.25rem !important;
+                border-radius: 1.25rem !important;
+            }
+
+            /* Grid Columns Spacing */
+            .row.g-4, .row.g-5 {
+                --bs-gutter-y: 1.25rem;
+            }
+
+            /* Tables Responsiveness */
+            .table-responsive {
+                border-radius: 12px;
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+            }
+
+            .table th, .table td {
+                padding: 0.75rem 0.5rem;
+                font-size: 0.85rem;
+                white-space: nowrap;
+            }
         }
     </style>
 </head>
@@ -72,8 +163,16 @@
     </main>
 
     @include('partials.footer')
+    @include('partials.mobile-bottom-nav')
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/sw.js').catch(err => console.log('SW reg error: ', err));
+            });
+        }
+    </script>
     @stack('scripts')
 </body>
 

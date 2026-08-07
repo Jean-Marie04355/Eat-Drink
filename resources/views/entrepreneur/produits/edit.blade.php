@@ -106,7 +106,9 @@
             <div class="text-center mb-5">
                 <div class="mb-3">
                     @if($produit->photo)
-                        <img src="{{ asset('storage/' . $produit->photo) }}" class="current-image-lux">
+                        <img src="{{ \Illuminate\Support\Str::startsWith($produit->photo, 'http') ? $produit->photo : asset('storage/' . $produit->photo) }}"
+                            onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1546069901-ba9599a7e63c';"
+                            class="current-image-lux">
                     @else
                         <div class="current-image-lux d-inline-flex align-items-center justify-content-center bg-dark">
                             <i class="fas fa-image fa-2x opacity-10"></i>
